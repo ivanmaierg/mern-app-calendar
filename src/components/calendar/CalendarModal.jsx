@@ -26,7 +26,9 @@ const CalendarModal = () => {
   const [dateStart, setDateStart] = useState(startEvent.toDate());
   const [dateEnd, setDateEnd] = useState(endEvent.toDate());
   const [titleValid, setTitleValid] = useState(true);
-  const closeModal = () => {};
+  const closeModal = () => {
+    // todo
+  };
   const [formValues, setformValues] = useState({
     title: 'Evento',
     notes: '',
@@ -66,9 +68,10 @@ const CalendarModal = () => {
       );
     }
     if (title.trim().length < 2) {
-      setTitleValid(false);
-      return closeModal();
+      return setTitleValid(false);
     }
+    setTitleValid(false);
+    closeModal();
   };
   return (
     <Modal
