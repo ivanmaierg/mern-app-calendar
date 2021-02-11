@@ -1,11 +1,20 @@
 /* eslint-disable consistent-return */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-undef */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import Modal from 'react-modal';
 import DateTimePicker from 'react-datetime-picker';
-import moment from 'moment';
+
 import Swal from 'sweetalert2';
+
+import { uiCloseModal } from '../../actions/ui';
+import {
+  eventAddNew,
+  eventClearActiveEvent,
+  eventUpdated,
+} from '../../actions/events';
 
 const customStyles = {
   content: {
@@ -20,36 +29,53 @@ const customStyles = {
 Modal.setAppElement('#root');
 
 const startEvent = moment().minutes(0).seconds(0).add(1, 'hours');
-const endEvent = startEvent.clone().add(1, 'hours');
-
+const endEvent = startEvent.clone().add(1, 'hour');
+const initEvent = {
+  title: '',
+  notes: '',
+  start: startEvent.toDate(),
+  end: endEvent.toDate(),
+};
 const CalendarModal = () => {
+  const { modalOpen } = useSelector((state) => state.ui);
+  const { activeEvent } = useSelector((state) => state.calendar);
+  const dispatch = useDispatch();
+
   const [dateStart, setDateStart] = useState(startEvent.toDate());
   const [dateEnd, setDateEnd] = useState(endEvent.toDate());
   const [titleValid, setTitleValid] = useState(true);
-  const closeModal = () => {
-    // todo
-  };
-  const [formValues, setformValues] = useState({
-    title: 'Evento',
-    notes: '',
-    start: startEvent.toDate(),
-    end: endEvent.toDate(),
-  });
+
+  const [formValues, setFormValues] = useState(initEvent);
+
   const {
     notes, title, start, end,
   } = formValues;
 
+  useEffect(() => {
+    if (activeEvent) {
+      setFormValues(activeEvent);
+    } else {
+      setFormValues(initEvent);
+    }
+  }, [activeEvent, setFormValues]);
+
+  const closeModal = () => {
+    dispatch(uiCloseModal());
+    dispatch(eventClearActiveEvent());
+    setFormValues(initEvent);
+  };
   const handleStartDate = (e) => {
     setDateStart(e);
-    setformValues({ ...formValues, start: 0 });
+    setFormValues({ ...formValues, start: e });
   };
 
   const handleEndDate = (e) => {
     setDateEnd(e);
-    setformValues({ ...formValues, end: 0 });
+
+    setFormValues({ ...formValues, end: e });
   };
   const handleInputChange = ({ target }) => {
-    setformValues({
+    setFormValues({
       ...formValues,
       [target.name]: target.value,
     });
@@ -70,12 +96,27 @@ const CalendarModal = () => {
     if (title.trim().length < 2) {
       return setTitleValid(false);
     }
+    if (activeEvent) {
+      dispatch(eventUpdated({ ...formValues }));
+    } else {
+      dispatch(
+        eventAddNew({
+          ...formValues,
+          id: new Date().getTime(),
+          user: {
+            _id: '123',
+            name: 'Ivan',
+          },
+        }),
+      );
+    }
+
     setTitleValid(false);
     closeModal();
   };
   return (
     <Modal
-      isOpen
+      isOpen={modalOpen}
       // onAfterOpen={afterOpenModal}
       onRequestClose={closeModal}
       style={customStyles}
@@ -84,7 +125,11 @@ const CalendarModal = () => {
       className="modal"
       overlayClassName="modal-fondo"
     >
-      <h1> Nuevo evento </h1>
+      <h1>
+        {' '}
+        {(activeEvent) ? activeEvent.title : 'Nuevo Evento'}
+        {' '}
+      </h1>
       <hr />
       <form className="container" onSubmit={handleSubmitForm}>
         <div className="form-group">

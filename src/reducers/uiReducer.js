@@ -1,18 +1,24 @@
-import { types } from '../types/types';
+/* eslint-disable default-case */
+import types from '../types/types';
 
 const initialState = {
-  modalOpen:false,
-}
+  modalOpen: false,
+};
 
-const uiReducer = (state = initialState, action) => {
+// eslint-disable-next-line consistent-return
+export default (state = initialState, action) => {
   switch (action.type) {
     case types.uiOpenModal:
       return {
         ...state,
-        modalOpen:true,
+        modalOpen: true,
       };
+    case types.uiCloseModal:
+      return {
+        ...state,
+        modalOpen: false,
+      };
+    default:
+      return state;
   }
-  default:
-    return state;
 };
-export default uiReducer

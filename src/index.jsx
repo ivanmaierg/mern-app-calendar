@@ -4,6 +4,7 @@ import CalendarApp from './CalendarApp';
 import reportWebVitals from './reportWebVitals';
 import './styles.css';
 
+console.log(process.env);
 ReactDOM.render(<CalendarApp />, document.getElementById('root'));
 
 // If you want to start measuring performance in your app, pass a function
