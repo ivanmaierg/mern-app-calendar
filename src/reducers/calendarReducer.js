@@ -37,7 +37,11 @@ const calendarReducer = (state = intialState, action) => {
         ...state,
         events: state.events.filter((e) => e.id !== state.activeEvent.id),
       };
-
+    case types.eventLoaded:
+      return {
+        ...state,
+        events: [...action.payload],
+      };
     default:
       return state;
   }

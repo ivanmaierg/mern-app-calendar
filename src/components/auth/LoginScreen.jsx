@@ -1,24 +1,28 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import startLogin from '../../actions/auth';
+import { startLogin } from '../../actions/auth';
 import useForm from '../../hooks/useForm';
-import './login.css';
 
-const LoginScreen = () => {
+const LoginScreen = ({ handleDisplay }) => {
   const dispatch = useDispatch();
   const [formLoginValues, handleLoginInputChange] = useForm({
     lEmail: 'eduardo@gmail.com',
     lPassword: '1aasdsd',
   });
+
   const { lEmail, lPassword } = formLoginValues;
+
   const handleLogin = (e) => {
     e.preventDefault();
     dispatch(startLogin(lEmail, lPassword));
   };
+
   return (
-    <div className="container login-container">
+    <div className="container">
       <div className="row">
-        <div className="col-md-6 login-form-1">
+        <div className="login-form-1">
           <h3>Ingreso</h3>
           <form onSubmit={handleLogin}>
             <div className="form-group mb-3">
@@ -43,45 +47,10 @@ const LoginScreen = () => {
             </div>
             <div className="form-group mb-4  d-flex justify-content-center">
               <input type="submit" className="btnSubmit" value="Login" />
-            </div>
-          </form>
-        </div>
-
-        <div className="col-md-6 login-form-2">
-          <h3>Registro</h3>
-          <form>
-            <div className="form-group mb-3">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Nombre"
-              />
-            </div>
-            <div className="form-group mb-3">
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Correo"
-              />
-            </div>
-            <div className="form-group mb-3">
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Contraseña"
-              />
-            </div>
-
-            <div className="form-group mb-3">
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Repita la contraseña"
-              />
-            </div>
-
-            <div className="form-group mb-4 d-flex justify-content-center">
-              <input type="submit" className="btnSubmit" value="Crear cuenta" />
+              <div>
+                new?
+                <button type="button" onClick={handleDisplay}>Register</button>
+              </div>
             </div>
           </form>
         </div>

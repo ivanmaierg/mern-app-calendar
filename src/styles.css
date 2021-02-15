@@ -5,6 +5,7 @@ body {
 }
 .calendar-screen {
   display: flex;
+  margin:auto;
   flex-flow: column;
   height: 100vh;
 }
@@ -83,3 +84,4 @@ body {
   position: fixed;
   left: 25px;
 }
+

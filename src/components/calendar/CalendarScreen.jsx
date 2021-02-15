@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,7 +10,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import CalendarEvent from './CalendarEvent';
 import CalendarModal from './CalendarModal';
 import { uiOpenModal } from '../../actions/ui';
-import { eventClearActiveEvent, eventSetActive } from '../../actions/events';
+import { eventStartLoading, eventClearActiveEvent, eventSetActive } from '../../actions/events';
 import AddNewFab from '../ui/AddNewFab';
 import DeleteEventFab from '../ui/DeleteEventFab';
 
@@ -27,10 +27,14 @@ const eventBuild = (event) => ({
 
 const CalendarScreen = () => {
   const dispatch = useDispatch();
+  const name = useSelector((state) => state.auth.name);
   const { events, activeEvent } = useSelector((state) => state.calendar);
   const [lastView, setLastView] = useState(
     localStorage.getItem('lastView') || 'month',
   );
+  useEffect(() => {
+    dispatch(eventStartLoading());
+  }, [dispatch]);
   const onDoubleClick = (e) => {
     dispatch(uiOpenModal());
   };

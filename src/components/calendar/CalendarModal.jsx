@@ -1,3 +1,4 @@
+/* eslint-disable import/named */
 /* eslint-disable consistent-return */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-undef */
@@ -11,7 +12,7 @@ import Swal from 'sweetalert2';
 
 import { uiCloseModal } from '../../actions/ui';
 import {
-  eventAddNew,
+  eventStartAddNew,
   eventClearActiveEvent,
   eventUpdated,
 } from '../../actions/events';
@@ -100,7 +101,7 @@ const CalendarModal = () => {
       dispatch(eventUpdated({ ...formValues }));
     } else {
       dispatch(
-        eventAddNew({
+        eventStartAddNew({
           ...formValues,
           id: new Date().getTime(),
           user: {
