@@ -2,7 +2,14 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Acerca de:
+Pequeño spa de calendario. El usuario puede crear y modificar eventos. utiliza React Calendar.
+consume una api hecha en express. Mongodb como base de datos.
+Los test se realizan con jest y enzyme.
+
 ## Available Scripts
+
+## 
 
 In the project directory, you can run:
 
